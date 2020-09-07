@@ -35,13 +35,13 @@ export default class GotService {
         return this.getResource(`/books/${id}`);
     }
 
-    _transformCharacter(char) {
+    _transformCharacter(char) {     
         return {
-            name: char.name,
-            gender: char.gender,
-            born: char.born,
-            died: char.died,
-            culture: char.culture
+            name: char.name || 'нет данных',
+            gender: char.gender || 'нет данных',
+            born: char.born || 'нет данных',
+            died: char.died || 'нет данных',
+            culture: char.culture || 'нет данных'
         }
     }
 

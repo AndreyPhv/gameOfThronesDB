@@ -48,7 +48,7 @@ export default class RandomChar extends Component {
         const content = !(loading || error) ? <View char={char}/> : null;
         
         return (
-            <div className="random-block rounded">
+            <div className='random-block rounded'>
                 {errorMessage}
                 {spinner}
                 {content}
@@ -58,7 +58,7 @@ export default class RandomChar extends Component {
 }
 
 const View = ({char}) => {
-    const {name, gender, born, died, culture} = char;
+    const {name, gender, born , died, culture} = char;
     return (
         <>
             <h4>Random Character: {name}</h4>
@@ -79,7 +79,7 @@ const View = ({char}) => {
                     <span className="term">Culture </span>
                     <span>{culture}</span>
                 </li>
-            </ul>
+            </ul>            
         </>
     )
 }
