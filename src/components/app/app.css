@@ -1,0 +1,14 @@
+/* * {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+    outline: none;
+    background: black center center no-repeat;
+}
+body {
+    overflow-x: hidden;
+    background: center center no-repeat;
+    background-size: cover;
+    font-size: 16px;
+    height: 100%;	
+} */

@@ -2,15 +2,15 @@ import React, {Component} from 'react';
 //import {Col, Row} from 'reactstrap';
 import ItemList from '../itemList';
 import CharDetails, {Field} from '../charDetails';
-import ErrorMessage from '../errorMessage/';
+import ErrorMessage from '../errorMessage';
 import gotService from '../../services/gotService';
 import RowBlock from '../rowBlock';
 
-export default class CharacterPage extends Component {
+export default class BookPage extends Component {
     gotService = new  gotService();
 
     state = {
-        selectedChar : 130,
+        selectedChar : null,
         error: false,
     }
 
@@ -33,17 +33,19 @@ export default class CharacterPage extends Component {
 
         const itemList = (
             <ItemList 
-                onItemSelected={this.onItemSelected} 
-                getData={this.gotService.getAllCharacters}
-                renderItem={({name, gender}) => `${name} (${gender})`}/>
+                //onItemSelected={this.onItemSelected}     //закоментировано для тестирования props по умолчанию
+                getData={this.gotService.getAllHouses}
+                renderItem={(item) => item.name}/>
         )
 
         const charDetails = (
-            <CharDetails charId={this.state.selectedChar}>
-                <Field field='gender' label='Gender'/>
-                <Field field='born' label='Born'/>
-                <Field field='died' label='Died'/>
-                <Field field='culture' label='Culture'/>
+            <CharDetails 
+                    charId={this.state.selectedChar}
+                    getDataAbout={this.gotService.getHouse}>
+                <Field field='region' label='Region'/>
+                <Field field='words' label='Words'/>
+                <Field field='founded' label='Founded'/>
+                <Field field='diedOut' label='DiedOut'/>
             </CharDetails>
         )
 

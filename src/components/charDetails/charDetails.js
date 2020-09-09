@@ -36,9 +36,11 @@ export default class CharDetails extends Component {
         const {charId} = this.props;
         if(!charId) {
             return
-        }        
-
-        this.gotService.getCharacter(charId)
+        }   
+        
+        const {getDataAbout} = this.props;
+        getDataAbout(charId)
+        //this.gotService.getCharacter(charId)
             .then((char) => {
                 this.setState({char})
             })
@@ -49,7 +51,7 @@ export default class CharDetails extends Component {
     render() {
 
         if(!this.state.char) {
-            return <span className="select-error">Please select a character</span>
+            return <span className="select-error">Please select something</span>
         }
         const {char} = this.state;
         const {name} = char;

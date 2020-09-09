@@ -50,3 +50,7 @@ export default class ItemList extends Component {
         );
     }
 }
+
+ItemList.defaultProps = {             //таким образом задаем props по умолчанию
+    onItemSelected: () => {}
+}

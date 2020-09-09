@@ -12,10 +12,13 @@ export default class RandomChar extends Component {
         loading: true,
         error: false,
     }
+    static defaultProps = {                      //объявление props по умолчанию
+        interval: 10000
+    }
 
     componentDidMount() {
         this.updateCharacter();
-        this.timerId = setInterval(this.updateCharacter, 10000);
+        this.timerId = setInterval(this.updateCharacter, this.props.interval);
     }
 
     componentWillUnmount() {
@@ -38,15 +41,12 @@ export default class RandomChar extends Component {
     
     updateCharacter = () => {
         const id = Math.floor(Math.random()*140 + 25);      //диапазон от 25 до 140
-        //const id = 99999999999;                           //тестирование ошибки
         this.gotService.getCharacter(id)
             .then (this.onCharLoaded)
             .catch(this.onError);
     }
 
     render() {
-        //console.log('render');
-
         const {char, loading, error} = this.state;
 
         const errorMessage = error ? <ErrorMessage/> : null;
@@ -62,6 +62,7 @@ export default class RandomChar extends Component {
         );
     }
 }
+
 
 const View = ({char}) => {
     const {name, gender, born , died, culture} = char;
