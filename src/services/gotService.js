@@ -2,7 +2,8 @@ export default class GotService {
     constructor(){
         this._apiBase = 'https://www.anapioficeandfire.com/api';
     }
-     async getResource(url) {
+
+    getResource = async (url) => {
         const res = await fetch(`${this._apiBase}${url}`);
     
         if (!res.ok) {
@@ -12,41 +13,60 @@ export default class GotService {
         return await res.json();
     };
 
-    async getAllCharacters() {
+    getAllCharacters = async () => {
         const res = await this.getResource('/characters?page=5&pageSize=10');
         return res.map(this._transformCharacter)
     }
-    async getCharacter(id) {
+    getCharacter = async (id) => {
         const character = await this.getResource(`/characters/${id}`);
         return this._transformCharacter(character);
     }
 
-    getAllHouses() {
-        return this.getResource('/houses/');
+    getAllHouses = async () => {
+        const res = await this.getResource('/houses/');
+        return res.map(this._transformHouse)
     }
-    getHouse(id) {
-        return this.getResource(`/houses/${id}`);
-    }
-
-    getAllBooks() {
-        return this.getResource('/books/');
-    }
-    getBook(id) {
-        return this.getResource(`/books/${id}`);
+    getHouse = async (id) => {
+        const house = await this.getResource(`/houses/${id}`);
+        return this._transformCharacter(house);
     }
 
-    _transformCharacter(char) {     
-        return {
-            name: char.name || 'нет данных',
-            gender: char.gender || 'нет данных',
-            born: char.born || 'нет данных',
-            died: char.died || 'нет данных',
-            culture: char.culture || 'нет данных'
+    getAllBooks = async () => {
+        const res = await this.getResource('/books/');
+        return res.map(this._transformBook)
+    }
+    getBook = async (id) => {
+        const book = await this.getResource(`/books/${id}`);
+        return this._transformBook(book);
+    }
+
+    isSet(data) {
+        if (data) {
+            return data
+        } else {
+            return 'нет данных'
         }
     }
 
-    _transformHouse(house) {
+    _extractId = (item) => {
+        const idRegExp = /\/([0-9]*)$/;
+        return item.url.match(idRegExp)[1];
+    }
+
+    _transformCharacter = (char) => {     
         return {
+            id: this._extractId(char),
+            name: this.isSet(char.name),
+            gender: this.isSet(char.gender),
+            born: this.isSet(char.born),
+            died: this.isSet(char.died),
+            culture: this.isSet(char.culture)
+        }
+    }
+
+    _transformHouse = (house) => {
+        return {
+            id: this._extractId(house),
             name: house.name,
             region: house.region,
             words: house.words,
@@ -56,8 +76,9 @@ export default class GotService {
         }
     }
 
-    _transformBook(book) {
+    _transformBook = (book) => {
         return {
+            id: this._extractId(book),
             name: book.name,
             numberOfPages: book.numberOfPages,
             publiser: book.publiser,

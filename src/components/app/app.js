@@ -2,29 +2,44 @@ import React, {Component} from 'react';
 import {Col, Row, Container, Button} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
+import ErrorMessage from '../errorMessage';
+import CharacterPage from '../characterPage';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
+import gotService from '../../services/gotService';
 
 
 export default class App extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            hide: false,
+    gotService = new  gotService();
+
+    state = {
+            showRandomChar: true,
+            error: false,
         }
 
-        this.onClick = this.onClick.bind(this);
-    }
-
-    onClick = ({hide}) => {
-
-        this.setState({            
-            hide : !this.state.hide,
+    componentDidCatch() {
+        console.log('error');
+        this.setState({
+            error: true
         })
     }
 
     
+    onClick = () => {
+        this.setState({            
+            showRandomChar : !this.state.showRandomChar,
+        })
+    }
+
+
+
+    
     render() {
+        
+        if (this.state.error) {
+            return <ErrorMessage/>            
+        }
+
         return (
             <> 
                 <Container>
@@ -33,7 +48,7 @@ export default class App extends Component {
                 <Container>
                     <Row>
                         <Col lg={{size: 5, offset: 0}}>
-                            { !this.state.hide ? <RandomChar/> : null }                            
+                            { this.state.showRandomChar ? <RandomChar/> : null }                            
                             <Button 
                                 onClick={this.onClick}                                
                                 outline color="success" 
@@ -43,12 +58,28 @@ export default class App extends Component {
                             <br></br>
                         </Col>
                     </Row>
+                    <CharacterPage/>
                     <Row>
                         <Col md='6'>
-                            <ItemList />
+                            <ItemList 
+                            onItemSelected={this.onItemSelected} 
+                            getData={this.gotService.getAllBooks}
+                            renderItem={(item) => item.name}/>
+                            {/* renderItem={(item) => (<><span>{item.name}</span><button>Click me</button></>)}/> */}
                         </Col>
                         <Col md='6'>
-                            <CharDetails />
+                            <CharDetails charId={this.state.selectedChar}/>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col md='6'>
+                            <ItemList 
+                            onItemSelected={this.onItemSelected} 
+                            getData={this.gotService.getAllHouses}
+                            renderItem={(item) => item.name}/>
+                        </Col>
+                        <Col md='6'>
+                            <CharDetails charId={this.state.selectedChar}/>
                         </Col>
                     </Row>
                 </Container>
